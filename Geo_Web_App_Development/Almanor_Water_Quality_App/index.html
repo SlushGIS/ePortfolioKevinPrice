@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>Lake Almanor Water Quality:2018-2020</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/4.26/esri/themes/dark/main.css">
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.10.4/dijit/themes/tundra/tundra.css">
+    <script src="https://js.arcgis.com/4.26/"></script>
+    <script src="main.js"></script>
+</head>
+
+<body>
+    <div class="panel-container">
+        <div id="viewDiv">
+            <div id="paneDiv" class="esri-widget">
+                <div>
+                    <p>
+                        Use the menu on the lower right to search for water quality data points by station, depth, month, and year. Selected Quality Points will update with any change to search criteria.
+                    </p>
+                </div>
+            </div>
+            <div id="notesDiv" class="esri-widget">
+                <div>
+                        <b>Search Notes:</b>
+                    <ul class="footer-ul">
+                        <li> Stream stations are only collected at a depth of .15 meters. </li>
+                        <li> A depth of 0 meters indicates a point where collection was attempted but the stream was dry or inaccessible.</li>
+                        <li> Not all station, depth, month, year combinations will return results. </li>
+                        <li> A missing value in a popup table means that the corresponding property is either not collected at the chosen station/depth (ie. Secchi Depth is not collected at stream stations) or a lack of equipment or fault did not allow for data to be collected. </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel-side">
+                <div class="myHeader">
+                    <h2 style="text-align:center;">Selected Quality Points</h2>
+                </div>
+                <ul id="list_quality_points">
+                    <li>Loading&hellip;</li>
+                </ul>
+            </div>
+            <div id="sidebar" class="esri-widget">
+                <div id="text">
+                    <div id="info">
+                        <div id="drop-downs"><br>
+                            Select Station:<br>
+                            <select style="max-width:90%;" id="station-id" class="esri-widget">
+                                <option value="all">All Stations</option>
+                            </select><br><br>
+                            Depth:
+                            <select id="depth" class="esri-widget"></select><br><br>
+                            Month:
+                            <select id="month" class="esri-widget"></select><br><br>
+
+                        </div>
+                    </div>
+                    Water Quality Year:<br><br>
+                    <div id="year" style="height:60px; width:100%;"></div>
+                    <div style="padding-left:5px;">
+                        <label id="message" class="label"></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

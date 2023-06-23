@@ -1,0 +1,117 @@
+html,
+body,
+#viewDiv {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+}
+
+#sidebar {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 43%;
+    width: 300px;
+    padding-left: 10px;
+    overflow: hidden;
+}
+
+.label {
+    color: white;
+    text-align: center;
+}
+
+.slider {
+    width: 100%;
+    height: 60px;
+}
+
+
+
+.panel-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.panel-side {
+    padding: 2px;
+    box-sizing: border-box;
+    width: 300px;
+    height: 57%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.6);
+    overflow: auto;
+    z-index: 60;
+}
+
+.panel-side h2 {
+    padding: 0 20px;
+    margin: 20px 0;
+}
+
+.panel-side ul {
+    list-style: none;
+    margin-top: 75px;
+    padding: 0;
+    top: 35px;
+}
+
+.panel-side li {
+    padding: 5px 20px;
+}
+
+.panel-result {
+    cursor: pointer;
+    margin: 2px 0;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.panel-result:hover,
+.panel-result:focus {
+    color: orange;
+    background-color: rgba(0, 0, 0, 0.75);
+}
+
+#paneDiv {
+    position: absolute;
+    top: 10px;
+    left: 62px;
+    right: 312px;
+    padding: 0 12px 0px 12px;
+    background-color: rgba(0, 0, 0, 0.75);
+    color: white;
+}
+
+#notesDiv {
+    position: absolute;
+    bottom: 270px;
+    left: 18px;
+    top: 170px;
+    width: 295px;
+    padding: 5px 12px 5px 12px;
+    background-color: rgba(0, 0, 0, 0.75);
+    color: white;
+    overflow: auto;
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+.footer-ul {
+    padding: 18px;
+    padding-top: 5px;
+}
+
+.footer-ul li {
+    padding: 5px 20px;
+}
+
+.myHeader {
+    position: fixed;
+    top: 0;
+    background-color: #242424;
+}
