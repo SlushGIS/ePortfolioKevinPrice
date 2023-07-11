@@ -160,7 +160,6 @@ require(["esri/Map", "esri/views/MapView",
         });
         months.sort(function(a, b) {
             return allMonths.indexOf(a) - allMonths.indexOf(b);
-            //return allMonths.indexOf(a) > allMonths.indexOf(b);
         });
 
         stationIds.forEach(function(value) {
@@ -187,12 +186,35 @@ require(["esri/Map", "esri/views/MapView",
     function setAlmanorPointsDefinitionExpression() {
 
         let whereValues = [StationIDSelect.value, depthSelect.value, monthSelect.value, yearSlider.values[0]];
-        var defExp = "Depth_meters_ ='" + whereValues[1] + "' AND Month = '" + whereValues[2] + "' AND Year = '" + whereValues[3] + "'"
+        var defExp = "Station_Identifier ='" + whereValues[0] + "' AND " + "Depth_meters_ ='" + whereValues[1] + "' AND Month = '" + whereValues[2] + "' AND Year = '" + whereValues[3] + "'";
+        var expYear = "Year = '" + whereValues[3] + "'";
+        var expMonth = "Month = '" + whereValues[2] + "'";
+        var expDepth = "Depth_meters_ = '" + whereValues[1] + "'"
+        var expStation = "Station_Identifier = '" + whereValues[0] + "'"
 
-        if (StationIDSelect.value == "all") {
+        if (StationIDSelect.value == "all" && depthSelect.value == "all" && monthSelect.value == "all") {
+            almanorPointLayer.definitionExpression = expYear;
+        }
+        else if (StationIDSelect.value == "all" && depthSelect.value == "all") {
+            almanorPointLayer.definitionExpression = expYear + " AND " + expMonth;
+        } 
+        else if (StationIDSelect.value == "all" && monthSelect.value == "all") {
+            almanorPointLayer.definitionExpression = expYear + " AND " + expDepth;
+        } 
+        else if (monthSelect.value == "all" && depthSelect.value == "all") {
+            almanorPointLayer.definitionExpression = expYear + " AND " + expStation;
+        } 
+        else if (monthSelect.value == "all") {
+            almanorPointLayer.definitionExpression = expYear + " AND " + expStation + " AND " + expDepth;
+        } 
+        else if (StationIDSelect.value == "all") {
+            almanorPointLayer.definitionExpression = expYear + " AND " + expMonth + " AND " + expDepth;
+        }
+        else if (depthSelect.value == "all") {
+            almanorPointLayer.definitionExpression = expYear + " AND " + expStation + " AND " + expMonth;
+        }
+        else {
             almanorPointLayer.definitionExpression = defExp;
-        } else {
-            almanorPointLayer.definitionExpression = "Station_Identifier ='" + whereValues[0] + "' AND " + defExp;
         }
 
         const pointQuery = almanorPointLayer.createQuery();
