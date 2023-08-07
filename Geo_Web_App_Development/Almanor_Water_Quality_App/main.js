@@ -10,6 +10,9 @@ require(["esri/Map", "esri/views/MapView",
     const StationIDSelect = document.getElementById("station-id");
     const depthSelect = document.getElementById("depth");
     const monthSelect = document.getElementById("month");
+    const legendOptionSelect = document.getElementById("legend-option");
+    const legendOptionValue = legendOptionSelect.value;
+    console.log(legendOptionValue);
 
     const yearSlider = new Slider({
         container: "year",
@@ -48,7 +51,7 @@ require(["esri/Map", "esri/views/MapView",
             '<span style="color:#c0c0c0;font-size:small;"><i>Longitude:&nbsp;{x}</i></span></div>',
     };
 
-    const waterQualityRenderer = new ClassBreaksRenderer({
+    const dissolvedOxygenRenderer = new ClassBreaksRenderer({
         field: "DO__ppm_"
     });
 
@@ -65,21 +68,21 @@ require(["esri/Map", "esri/views/MapView",
     };
 
     addClass(0, 3, "rgb(215,25,28)", "Extremely Low Oxygen (0.0-3.0ppm)",
-        waterQualityRenderer);
+        dissolvedOxygenRenderer);
     addClass(3, 5, "rgb(253,174,97)", "Low Oxygen (3.1-5.0 ppm)",
-        waterQualityRenderer);
+        dissolvedOxygenRenderer);
     addClass(5, 7, "rgb(255,255,191)",
-        "Moderate Oxygen (5.1-7.0ppm)", waterQualityRenderer);
+        "Moderate Oxygen (5.1-7.0ppm)", dissolvedOxygenRenderer);
     addClass(7, 10, "rgb(171,221,164)",
-        "High Oxygen (7.1-10.0ppm)", waterQualityRenderer);
+        "High Oxygen (7.1-10.0ppm)", dissolvedOxygenRenderer);
     addClass(10, 20, "rgb(43,131,186)",
-        "Extremely High Oxygen (> 10ppm)", waterQualityRenderer);
+        "Extremely High Oxygen (> 10ppm)", dissolvedOxygenRenderer);
 
     const almanorPointLayer = new FeatureLayer({
         portalItem: {
             id: "bece4a06d4104b95be75e5e7bd180875"
         },
-        renderer: waterQualityRenderer,
+        renderer: legendOptionValue,
         outfields: ["*"],
         popupTemplate: template,
         visible: false,
@@ -255,7 +258,7 @@ require(["esri/Map", "esri/views/MapView",
                 source: graphics,
                 fields: almanorPointLayer.fields,
                 objectIdField: "OBJECTID",
-                renderer: waterQualityRenderer,
+                renderer: dissolvedOxygenRenderer,
                 popupTemplate: template
             });
 
@@ -318,6 +321,10 @@ require(["esri/Map", "esri/views/MapView",
     });
 
     StationIDSelect.addEventListener("change", function() {
+        setAlmanorPointsDefinitionExpression();
+    });
+
+    legendOptionSelect.addEventListener("change", function() {
         setAlmanorPointsDefinitionExpression();
     });
 

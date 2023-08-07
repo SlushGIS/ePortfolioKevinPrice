@@ -45,14 +45,14 @@
                 <div id="text">
                     <div id="info">
                         <div id="drop-downs"><br>
-                            Select Station:<br>
+                            Station:<br>
                             <select style="max-width:90%;" id="station-id" class="esri-widget">
                                 <option value="all">All Stations</option>
                             </select><br><br>
                             Depth:
                             <select id="depth" class="esri-widget">
                                 <option value="all">All Depths</option>
-                            </select><br><br>
+                            </select>
                             Month:
                             <select id="month" class="esri-widget">
                                 <option value="all">All Months</option>
@@ -64,6 +64,12 @@
                     <div id="year" style="height:60px; width:100%;"></div>
                     <div style="padding-left:5px;">
                         <label id="message" class="label"></label>
+                    </div><br>
+                    <div id="legend-options">
+                        Legend Option:
+                        <select id="legend-option" class="esri-widget">
+                            <option value="dissolvedOxygenRenderer" selected>Dissolved Oxygen</option>
+                        </select>
                     </div>
                 </div>
             </div>
