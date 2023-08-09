@@ -51,6 +51,19 @@ require(["esri/Map", "esri/views/MapView",
             '<span style="color:#c0c0c0;font-size:small;"><i>Longitude:&nbsp;{x}</i></span></div>',
     };
 
+    const defaultRenderer = {
+        type: "simple",  // autocasts as new SimpleRenderer()
+        symbol: {
+          type: "simple-marker",  // autocasts as new SimpleMarkerSymbol()
+          size: 6,
+          color: "black",
+          outline: {  // autocasts as new SimpleLineSymbol()
+            width: 0.5,
+            color: "white"
+          }
+        }
+      };
+
     const dissolvedOxygenRenderer = new ClassBreaksRenderer({
         field: "DO__ppm_"
     });
@@ -186,6 +199,18 @@ require(["esri/Map", "esri/views/MapView",
         return setAlmanorPointsDefinitionExpression();
     }
 
+    function determineRenderer() {
+
+
+        if (legendOptionSelect.value == "dissolvedOxygenRenderer") {
+            renderer = dissolvedOxygenRenderer;
+        }
+        else if (legendOptionSelect.value == "defaultRenderer") {
+            renderer =defaultRenderer;
+        }
+        return renderer;
+    }
+
     function setAlmanorPointsDefinitionExpression() {
 
         let whereValues = [StationIDSelect.value, depthSelect.value, monthSelect.value, yearSlider.values[0]];
@@ -258,7 +283,7 @@ require(["esri/Map", "esri/views/MapView",
                 source: graphics,
                 fields: almanorPointLayer.fields,
                 objectIdField: "OBJECTID",
-                renderer: dissolvedOxygenRenderer,
+                renderer: determineRenderer(),
                 popupTemplate: template
             });
 
