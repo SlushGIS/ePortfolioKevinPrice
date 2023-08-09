@@ -91,6 +91,21 @@ require(["esri/Map", "esri/views/MapView",
     addClass(10, 20, "rgb(43,131,186)",
         "Extremely High Oxygen (> 10ppm)", dissolvedOxygenRenderer);
 
+    const temperatureRenderer = new ClassBreaksRenderer({
+        field: "Temp__oF_"
+    });
+
+    addClass(38.3, 47.3, "rgb(43,131,186)", "Coldest",
+        temperatureRenderer);
+    addClass(47.3, 52.9, "rgb(171,221,164)", "Cold",
+        temperatureRenderer);
+    addClass(52.9, 59.5, "rgb(255,255,191)",
+        "Average", temperatureRenderer);
+    addClass(59.5, 66.6, "rgb(253,174,97)",
+        "Warm", temperatureRenderer);
+    addClass(66.6, 75.7, "rgb(215,25,28)",
+        "Warmest", temperatureRenderer);
+
     const almanorPointLayer = new FeatureLayer({
         portalItem: {
             id: "bece4a06d4104b95be75e5e7bd180875"
@@ -206,8 +221,13 @@ require(["esri/Map", "esri/views/MapView",
             renderer = dissolvedOxygenRenderer;
         }
         else if (legendOptionSelect.value == "defaultRenderer") {
-            renderer =defaultRenderer;
+            renderer = defaultRenderer;
         }
+
+        else if (legendOptionSelect.value == "temperatureRenderer") {
+            renderer = temperatureRenderer;
+        }
+
         return renderer;
     }
 
@@ -293,7 +313,7 @@ require(["esri/Map", "esri/views/MapView",
                 view: view,
                 layerInfos: [{
                     layer: selLayer,
-                    title: "Dissolved Oxygen Levels"
+                    title: "Almanor Water Quality Legend"
                 }]
             });
 
