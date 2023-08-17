@@ -55,7 +55,7 @@ require(["esri/Map", "esri/views/MapView",
         type: "simple",  // autocasts as new SimpleRenderer()
         symbol: {
           type: "simple-marker",  // autocasts as new SimpleMarkerSymbol()
-          size: 6,
+          size: 8,
           color: "black",
           outline: {  // autocasts as new SimpleLineSymbol()
             width: 0.5,
@@ -68,43 +68,44 @@ require(["esri/Map", "esri/views/MapView",
         field: "DO__ppm_"
     });
 
-    const addClass = function(min, max, clr, lbl, renderer) {
+    const addClass = function(min, max, clr, lbl, sz, renderer) {
         renderer.addClassBreakInfo({
             minValue: min,
             maxValue: max,
             symbol: new SimpleMarkerSymbol({
                 color: clr,
+                size: sz,
                 style: "triangle"
             }),
             label: lbl
         });
     };
 
-    addClass(0, 3, "rgb(215,25,28)", "Extremely Low Oxygen (0.0-3.0ppm)",
+    addClass(0, 3, "rgb(215,25,28)", "Extremely Low Oxygen (0.0-3.0ppm)", 20,
         dissolvedOxygenRenderer);
-    addClass(3, 5, "rgb(253,174,97)", "Low Oxygen (3.1-5.0 ppm)",
+    addClass(3, 5, "rgb(253,174,97)", "Low Oxygen (3.1-5.0 ppm)", 18,
         dissolvedOxygenRenderer);
     addClass(5, 7, "rgb(255,255,191)",
-        "Moderate Oxygen (5.1-7.0ppm)", dissolvedOxygenRenderer);
+        "Moderate Oxygen (5.1-7.0ppm)", 16, dissolvedOxygenRenderer);
     addClass(7, 10, "rgb(171,221,164)",
-        "High Oxygen (7.1-10.0ppm)", dissolvedOxygenRenderer);
+        "High Oxygen (7.1-10.0ppm)", 14, dissolvedOxygenRenderer);
     addClass(10, 20, "rgb(43,131,186)",
-        "Extremely High Oxygen (> 10ppm)", dissolvedOxygenRenderer);
+        "Extremely High Oxygen (> 10ppm)", 12, dissolvedOxygenRenderer);
 
     const temperatureRenderer = new ClassBreaksRenderer({
         field: "Temp__oF_"
     });
 
-    addClass(38.3, 47.3, "rgb(43,131,186)", "Coldest",
+    addClass(38.3, 47.3, "rgb(43,131,186)", "Coldest (38.3 - 47.3 F)", 12,
         temperatureRenderer);
-    addClass(47.3, 52.9, "rgb(171,221,164)", "Cold",
+    addClass(47.3, 52.9, "rgb(171,221,164)", "Cold", 14,
         temperatureRenderer);
     addClass(52.9, 59.5, "rgb(255,255,191)",
-        "Average", temperatureRenderer);
+        "Average", 16, temperatureRenderer);
     addClass(59.5, 66.6, "rgb(253,174,97)",
-        "Warm", temperatureRenderer);
-    addClass(66.6, 75.7, "rgb(215,25,28)",
-        "Warmest", temperatureRenderer);
+        "Warm", 18, temperatureRenderer);
+    addClass(66.6, 75.7, "rgb(215,25,28)", 
+        "Warmest", 20, temperatureRenderer);
 
     const almanorPointLayer = new FeatureLayer({
         portalItem: {
@@ -306,6 +307,11 @@ require(["esri/Map", "esri/views/MapView",
                 renderer: determineRenderer(),
                 popupTemplate: template
             });
+
+            selLayer.orderBy = [{
+                field: "Depth_meters_",
+                order: "descending"
+            }];
 
             map.add(selLayer);
 
