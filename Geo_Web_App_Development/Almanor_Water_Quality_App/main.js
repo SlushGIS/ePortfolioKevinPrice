@@ -75,22 +75,22 @@ require(["esri/Map", "esri/views/MapView",
             symbol: new SimpleMarkerSymbol({
                 color: clr,
                 size: sz,
-                style: "triangle"
+                style: "circle"
             }),
             label: lbl
         });
     };
 
-    addClass(0, 3, "rgb(215,25,28)", "Extremely Low Oxygen (0.0-3.0ppm)", 20,
+    addClass(0, 3, "rgb(215,25,28)", "Extremely Low Oxygen (0.0-3.0ppm)", 30,
         dissolvedOxygenRenderer);
-    addClass(3, 5, "rgb(253,174,97)", "Low Oxygen (3.1-5.0 ppm)", 18,
+    addClass(3, 5, "rgb(253,174,97)", "Low Oxygen (3.1-5.0 ppm)", 24,
         dissolvedOxygenRenderer);
     addClass(5, 7, "rgb(255,255,191)",
-        "Moderate Oxygen (5.1-7.0ppm)", 16, dissolvedOxygenRenderer);
+        "Moderate Oxygen (5.1-7.0ppm)", 18, dissolvedOxygenRenderer);
     addClass(7, 10, "rgb(171,221,164)",
-        "High Oxygen (7.1-10.0ppm)", 14, dissolvedOxygenRenderer);
+        "High Oxygen (7.1-10.0ppm)", 12, dissolvedOxygenRenderer);
     addClass(10, 20, "rgb(43,131,186)",
-        "Extremely High Oxygen (> 10ppm)", 12, dissolvedOxygenRenderer);
+        "Extremely High Oxygen (> 10ppm)", 6, dissolvedOxygenRenderer);
 
     const temperatureRenderer = new ClassBreaksRenderer({
         field: "Temp__oF_"
@@ -305,13 +305,11 @@ require(["esri/Map", "esri/views/MapView",
                 fields: almanorPointLayer.fields,
                 objectIdField: "OBJECTID",
                 renderer: determineRenderer(),
+                orderBy: [{
+                    field: "Depth_meters_"
+                }],
                 popupTemplate: template
             });
-
-            selLayer.orderBy = [{
-                field: "Depth_meters_",
-                order: "descending"
-            }];
 
             map.add(selLayer);
 
