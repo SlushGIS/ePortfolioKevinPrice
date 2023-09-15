@@ -96,16 +96,16 @@ require(["esri/Map", "esri/views/MapView",
         field: "Temp__oF_"
     });
 
-    addClass(38.3, 47.3, "rgb(43,131,186)", "Coldest (38.3 - 47.3 F)", 12,
+    addClass(38.3, 47.3, "rgb(43,131,186)", "Coldest (38.3 - 47.3 F)", 6,
         temperatureRenderer);
-    addClass(47.3, 52.9, "rgb(171,221,164)", "Cold", 14,
+    addClass(47.3, 52.9, "rgb(171,221,164)", "Cold", 12,
         temperatureRenderer);
     addClass(52.9, 59.5, "rgb(255,255,191)",
-        "Average", 16, temperatureRenderer);
+        "Average", 18, temperatureRenderer);
     addClass(59.5, 66.6, "rgb(253,174,97)",
-        "Warm", 18, temperatureRenderer);
+        "Warm", 24, temperatureRenderer);
     addClass(66.6, 75.7, "rgb(215,25,28)", 
-        "Warmest", 20, temperatureRenderer);
+        "Warmest", 30, temperatureRenderer);
 
     const almanorPointLayer = new FeatureLayer({
         portalItem: {
@@ -214,7 +214,31 @@ require(["esri/Map", "esri/views/MapView",
         });
         return setAlmanorPointsDefinitionExpression();
     }
+    function determineOrder() {
 
+
+        if (legendOptionSelect.value == "dissolvedOxygenRenderer") {
+            order = [{
+                field: "DO__ppm_",
+                order: "descending"
+            }],
+        }
+        else if (legendOptionSelect.value == "defaultRenderer") {
+            order = [{
+                field: "DO__ppm_",
+                order: "descending"
+            }],
+        }
+
+        else if (legendOptionSelect.value == "temperatureRenderer") {
+            order = [{
+                field: "DO__ppm_",
+                order: "descending"
+            }],
+        }
+
+        return order;
+    }
     function determineRenderer() {
 
 
@@ -305,9 +329,7 @@ require(["esri/Map", "esri/views/MapView",
                 fields: almanorPointLayer.fields,
                 objectIdField: "OBJECTID",
                 renderer: determineRenderer(),
-                orderBy: [{
-                    field: "Depth_meters_"
-                }],
+                orderBy: determineOrder(),
                 popupTemplate: template
             });
 
