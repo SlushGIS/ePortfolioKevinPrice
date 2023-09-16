@@ -81,7 +81,8 @@ require(["esri/Map", "esri/views/MapView",
             label: lbl
         });
     };
-
+    
+    //Defines and adds class for DO Renderer
     addClass(0, 3, "rgb(215,25,28)", "Extremely Low Oxygen (0.0-3.0ppm)", 30,
         dissolvedOxygenRenderer);
     addClass(3, 5, "rgb(253,174,97)", "Low Oxygen (3.1-5.0 ppm)", 24,
@@ -97,16 +98,17 @@ require(["esri/Map", "esri/views/MapView",
         field: "Temp__oF_"
     });
 
+    //Defines and adds classes for temperature Renderer
     addClass(38.3, 47.3, "rgb(43,131,186)", "Coldest (38.3 - 47.3 F)", 6,
         temperatureRenderer);
-    addClass(47.3, 52.9, "rgb(171,221,164)", "Cold", 12,
+    addClass(47.3, 52.9, "rgb(171,221,164)", "Cold (47.3 - 52.9 F)", 12,
         temperatureRenderer);
     addClass(52.9, 59.5, "rgb(255,255,191)",
-        "Average", 18, temperatureRenderer);
+        "Average (52.9 - 59.5 F)", 18, temperatureRenderer);
     addClass(59.5, 66.6, "rgb(253,174,97)",
-        "Warm", 24, temperatureRenderer);
+        "Warm (59.5 - 66.6 F)", 24, temperatureRenderer);
     addClass(66.6, 75.7, "rgb(215,25,28)", 
-        "Warmest", 30, temperatureRenderer);
+        "Warmest (66.6 - 75.7 F)", 30, temperatureRenderer);
 
     const almanorPointLayer = new FeatureLayer({
         portalItem: {
