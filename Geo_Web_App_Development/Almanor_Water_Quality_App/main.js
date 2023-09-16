@@ -425,7 +425,7 @@ require(["esri/Map", "esri/views/MapView",
 
 
 
-    view.ui.add(overlayExpand, "top-left");
+    //view.ui.add(overlayExpand, "top-left");
     
 
     // Directions popup window
