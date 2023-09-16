@@ -2,10 +2,11 @@ require(["esri/Map", "esri/views/MapView",
     "esri/layers/FeatureLayer",
     "esri/renderers/ClassBreaksRenderer",
     "esri/symbols/SimpleMarkerSymbol", "esri/widgets/Legend",
-    "esri/widgets/Home", "esri/rest/support/Query", "esri/Graphic", "esri/widgets/Slider", "esri/widgets/Fullscreen"
-], (Map, MapView, FeatureLayer, ClassBreaksRenderer, SimpleMarkerSymbol, Legend, Home, Query, Graphic, Slider, Fullscreen) => {
+    "esri/widgets/Home", "esri/rest/support/Query", "esri/Graphic", "esri/widgets/Slider", "esri/widgets/Fullscreen", "esri/widgets/Expand"
+], (Map, MapView, FeatureLayer, ClassBreaksRenderer, SimpleMarkerSymbol, Legend, Home, Query, Graphic, Slider, Fullscreen, Expand) => {
 
     const listNode = document.getElementById("list_quality_points");
+    const overlay = document.getElementById("modalOverlay")
 
     const StationIDSelect = document.getElementById("station-id");
     const depthSelect = document.getElementById("depth");
@@ -221,20 +222,20 @@ require(["esri/Map", "esri/views/MapView",
             order = [{
                 field: "DO__ppm_",
                 order: "descending"
-            }],
+            }]
         }
         else if (legendOptionSelect.value == "defaultRenderer") {
             order = [{
                 field: "DO__ppm_",
                 order: "descending"
-            }],
+            }]
         }
 
         else if (legendOptionSelect.value == "temperatureRenderer") {
             order = [{
-                field: "DO__ppm_",
-                order: "descending"
-            }],
+                field: "Temp__oF_",
+                order: "ascending"
+            }]
         }
 
         return order;
@@ -410,9 +411,31 @@ require(["esri/Map", "esri/views/MapView",
 
     const fullscreen = new Fullscreen({
         view: view
-    })
+    });
 
     view.ui.add(homeWidget, "top-left");
     view.ui.add(fullscreen, "top-left");
+
+    const overlayExpand = new Expand({
+        expandIcon: "layers",  // see https://developers.arcgis.com/calcite-design-system/icons/
+        // expandTooltip: "Expand LayerList", // optional, defaults to "Expand" for English locale
+        view: view,
+        content: "Hello"
+      });
+
+
+
+    view.ui.add(overlayExpand, "top-left");
+    
+
+    // Directions popup window
+    window.onload = function() {
+        document.getElementById('button').onclick = function() {
+            document.getElementById('modalOverlay').style.display = 'none'
+        };
+    };
+
+
+
 
 });
