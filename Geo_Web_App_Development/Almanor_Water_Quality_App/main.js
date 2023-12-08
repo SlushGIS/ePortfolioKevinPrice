@@ -2,14 +2,18 @@ require(["esri/Map", "esri/views/MapView",
     "esri/layers/FeatureLayer",
     "esri/renderers/ClassBreaksRenderer",
     "esri/symbols/SimpleMarkerSymbol", "esri/widgets/Legend",
-    "esri/widgets/Home", "esri/rest/support/Query", "esri/Graphic", "esri/widgets/Slider", "esri/widgets/Fullscreen"
-], (Map, MapView, FeatureLayer, ClassBreaksRenderer, SimpleMarkerSymbol, Legend, Home, Query, Graphic, Slider, Fullscreen) => {
+    "esri/widgets/Home", "esri/rest/support/Query", "esri/Graphic", "esri/widgets/Slider", "esri/widgets/Fullscreen", "esri/widgets/Expand"
+], (Map, MapView, FeatureLayer, ClassBreaksRenderer, SimpleMarkerSymbol, Legend, Home, Query, Graphic, Slider, Fullscreen, Expand) => {
 
     const listNode = document.getElementById("list_quality_points");
+    const overlay = document.getElementById("modalOverlay")
 
     const StationIDSelect = document.getElementById("station-id");
     const depthSelect = document.getElementById("depth");
     const monthSelect = document.getElementById("month");
+    const legendOptionSelect = document.getElementById("legend-option");
+    const legendOptionValue = legendOptionSelect.value;
+    console.log(legendOptionValue);
 
     const yearSlider = new Slider({
         container: "year",
@@ -48,38 +52,69 @@ require(["esri/Map", "esri/views/MapView",
             '<span style="color:#c0c0c0;font-size:small;"><i>Longitude:&nbsp;{x}</i></span></div>',
     };
 
-    const waterQualityRenderer = new ClassBreaksRenderer({
+    const defaultRenderer = {
+        type: "simple",  // autocasts as new SimpleRenderer()
+        symbol: {
+          type: "simple-marker",  // autocasts as new SimpleMarkerSymbol()
+          size: 8,
+          color: "black",
+          outline: {  // autocasts as new SimpleLineSymbol()
+            width: 0.5,
+            color: "white"
+          }
+        }
+      };
+
+    const dissolvedOxygenRenderer = new ClassBreaksRenderer({
         field: "DO__ppm_"
     });
 
-    const addClass = function(min, max, clr, lbl, renderer) {
+    const addClass = function(min, max, clr, lbl, sz, renderer) {
         renderer.addClassBreakInfo({
             minValue: min,
             maxValue: max,
             symbol: new SimpleMarkerSymbol({
                 color: clr,
-                style: "triangle"
+                size: sz,
+                style: "circle"
             }),
             label: lbl
         });
     };
-
-    addClass(0, 3, "rgb(215,25,28)", "Extremely Low Oxygen (0.0-3.0ppm)",
-        waterQualityRenderer);
-    addClass(3, 5, "rgb(253,174,97)", "Low Oxygen (3.1-5.0 ppm)",
-        waterQualityRenderer);
+    
+    //Defines and adds class for DO Renderer
+    addClass(0, 3, "rgb(215,25,28)", "Extremely Low Oxygen (0.0-3.0ppm)", 30,
+        dissolvedOxygenRenderer);
+    addClass(3, 5, "rgb(253,174,97)", "Low Oxygen (3.1-5.0 ppm)", 24,
+        dissolvedOxygenRenderer);
     addClass(5, 7, "rgb(255,255,191)",
-        "Moderate Oxygen (5.1-7.0ppm)", waterQualityRenderer);
+        "Moderate Oxygen (5.1-7.0ppm)", 18, dissolvedOxygenRenderer);
     addClass(7, 10, "rgb(171,221,164)",
-        "High Oxygen (7.1-10.0ppm)", waterQualityRenderer);
+        "High Oxygen (7.1-10.0ppm)", 12, dissolvedOxygenRenderer);
     addClass(10, 20, "rgb(43,131,186)",
-        "Extremely High Oxygen (> 10ppm)", waterQualityRenderer);
+        "Extremely High Oxygen (> 10ppm)", 6, dissolvedOxygenRenderer);
+
+    const temperatureRenderer = new ClassBreaksRenderer({
+        field: "Temp__oF_"
+    });
+
+    //Defines and adds classes for temperature Renderer
+    addClass(38.3, 47.3, "rgb(43,131,186)", "Coldest (38.3 - 47.3 F)", 6,
+        temperatureRenderer);
+    addClass(47.3, 52.9, "rgb(171,221,164)", "Cold (47.3 - 52.9 F)", 12,
+        temperatureRenderer);
+    addClass(52.9, 59.5, "rgb(255,255,191)",
+        "Average (52.9 - 59.5 F)", 18, temperatureRenderer);
+    addClass(59.5, 66.6, "rgb(253,174,97)",
+        "Warm (59.5 - 66.6 F)", 24, temperatureRenderer);
+    addClass(66.6, 75.7, "rgb(215,25,28)", 
+        "Warmest (66.6 - 75.7 F)", 30, temperatureRenderer);
 
     const almanorPointLayer = new FeatureLayer({
         portalItem: {
             id: "bece4a06d4104b95be75e5e7bd180875"
         },
-        renderer: waterQualityRenderer,
+        renderer: legendOptionValue,
         outfields: ["*"],
         popupTemplate: template,
         visible: false,
@@ -182,6 +217,47 @@ require(["esri/Map", "esri/views/MapView",
         });
         return setAlmanorPointsDefinitionExpression();
     }
+    function determineOrder() {
+
+
+        if (legendOptionSelect.value == "dissolvedOxygenRenderer") {
+            order = [{
+                field: "DO__ppm_",
+                order: "descending"
+            }]
+        }
+        else if (legendOptionSelect.value == "defaultRenderer") {
+            order = [{
+                field: "DO__ppm_",
+                order: "descending"
+            }]
+        }
+
+        else if (legendOptionSelect.value == "temperatureRenderer") {
+            order = [{
+                field: "Temp__oF_",
+                order: "ascending"
+            }]
+        }
+
+        return order;
+    }
+    function determineRenderer() {
+
+
+        if (legendOptionSelect.value == "dissolvedOxygenRenderer") {
+            renderer = dissolvedOxygenRenderer;
+        }
+        else if (legendOptionSelect.value == "defaultRenderer") {
+            renderer = defaultRenderer;
+        }
+
+        else if (legendOptionSelect.value == "temperatureRenderer") {
+            renderer = temperatureRenderer;
+        }
+
+        return renderer;
+    }
 
     function setAlmanorPointsDefinitionExpression() {
 
@@ -255,7 +331,8 @@ require(["esri/Map", "esri/views/MapView",
                 source: graphics,
                 fields: almanorPointLayer.fields,
                 objectIdField: "OBJECTID",
-                renderer: waterQualityRenderer,
+                renderer: determineRenderer(),
+                orderBy: determineOrder(),
                 popupTemplate: template
             });
 
@@ -265,7 +342,7 @@ require(["esri/Map", "esri/views/MapView",
                 view: view,
                 layerInfos: [{
                     layer: selLayer,
-                    title: "Dissolved Oxygen Levels"
+                    title: "Almanor Water Quality Legend"
                 }]
             });
 
@@ -321,6 +398,10 @@ require(["esri/Map", "esri/views/MapView",
         setAlmanorPointsDefinitionExpression();
     });
 
+    legendOptionSelect.addEventListener("change", function() {
+        setAlmanorPointsDefinitionExpression();
+    });
+
     yearSlider.on("thumb-drag", function() {
         setAlmanorPointsDefinitionExpression();
     });
@@ -332,9 +413,31 @@ require(["esri/Map", "esri/views/MapView",
 
     const fullscreen = new Fullscreen({
         view: view
-    })
+    });
 
     view.ui.add(homeWidget, "top-left");
     view.ui.add(fullscreen, "top-left");
+
+    const overlayExpand = new Expand({
+        expandIcon: "layers",  // see https://developers.arcgis.com/calcite-design-system/icons/
+        // expandTooltip: "Expand LayerList", // optional, defaults to "Expand" for English locale
+        view: view,
+        content: "Hello"
+      });
+
+
+
+    //view.ui.add(overlayExpand, "top-left");
+    
+
+    // Directions popup window
+    window.onload = function() {
+        document.getElementById('button').onclick = function() {
+            document.getElementById('modalOverlay').style.display = 'none'
+        };
+    };
+
+
+
 
 });

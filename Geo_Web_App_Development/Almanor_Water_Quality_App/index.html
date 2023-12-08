@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-    <title>Lake Almanor Water Quality:2018-2022</title>
+    <title>Lake Almanor Water Quality Web Map</title>
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" href="https://js.arcgis.com/4.26/esri/themes/dark/main.css">
     <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.10.4/dijit/themes/tundra/tundra.css">
@@ -13,9 +13,30 @@
 </head>
 
 <body>
+    <div id="modalOverlay">
+        <div class="modalPopup">
+            <div class="modalContent">
+                    <h1>Welcome</h1>
+                    <p>This web map displays water quality data collected by the Lake Almanor Watershed Group. It allows you to 
+                        filter results and display them in a variety of ways to help you visualize the health of the lake.
+                        Utilize the menu on the lower right to search for water quality data points by station, depth, month, and year. 
+                        Selected Quality Points will update with any change to search criteria. 
+                    </p>
+                    <h2>Search Notes:</h2>
+                <ul class="footer-ul">
+                    <li> Stream stations are only collected at a depth of .15 meters. </li>
+                    <li> A depth of 0 meters indicates a point where collection was attempted but the stream was dry or inaccessible.</li>
+                    <li> Not all station, depth, month, year combinations will return results. </li>
+                    <li> A missing value in a popup table means that the corresponding property is either not collected at the chosen station/depth (ie. Secchi Depth is not collected at stream stations) or a lack of equipment or fault did not allow for data to be collected. </li>
+                </ul>
+                <button class="buttonStyle" id="button">Close</button>
+            </div>
+        </div>
+    </div>
+    
     <div class="panel-container">
         <div id="viewDiv">
-            <div id="paneDiv" class="esri-widget">
+            <!--<div id="paneDiv" class="esri-widget">
                 <div>
                     <p>
                         Use the menu on the lower right to search for water quality data points by station, depth, month, and year. Selected Quality Points will update with any change to search criteria.
@@ -32,7 +53,7 @@
                         <li> A missing value in a popup table means that the corresponding property is either not collected at the chosen station/depth (ie. Secchi Depth is not collected at stream stations) or a lack of equipment or fault did not allow for data to be collected. </li>
                     </ul>
                 </div>
-            </div>
+            </div>-->
             <div class="panel-side">
                 <div class="myHeader">
                     <h2 style="text-align:center;">Selected Quality Points</h2>
@@ -45,14 +66,14 @@
                 <div id="text">
                     <div id="info">
                         <div id="drop-downs"><br>
-                            Select Station:<br>
+                            Station:<br>
                             <select style="max-width:90%;" id="station-id" class="esri-widget">
                                 <option value="all">All Stations</option>
                             </select><br><br>
                             Depth:
                             <select id="depth" class="esri-widget">
                                 <option value="all">All Depths</option>
-                            </select><br><br>
+                            </select>
                             Month:
                             <select id="month" class="esri-widget">
                                 <option value="all">All Months</option>
@@ -64,6 +85,14 @@
                     <div id="year" style="height:60px; width:100%;"></div>
                     <div style="padding-left:5px;">
                         <label id="message" class="label"></label>
+                    </div><br>
+                    <div id="legend-options">
+                        Legend Option:
+                        <select id="legend-option" class="esri-widget">
+                            <option value="defaultRenderer" selected>Default</option>
+                            <option value="dissolvedOxygenRenderer">Dissolved Oxygen</option>
+                            <option value="temperatureRenderer">Temperature</option>
+                        </select>
                     </div>
                 </div>
             </div>
