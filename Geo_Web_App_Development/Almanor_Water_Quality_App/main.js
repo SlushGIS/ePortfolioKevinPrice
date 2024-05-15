@@ -18,7 +18,7 @@ require(["esri/Map", "esri/views/MapView",
     const yearSlider = new Slider({
         container: "year",
         min: 2018,
-        max: 2023,
+        max: 2024,
         steps: 1,
         labelFormatFunction: function(value, type) {
             if (type === "value") {
@@ -26,7 +26,7 @@ require(["esri/Map", "esri/views/MapView",
             }
             return value;
         },
-        values: [2023],
+        values: [2024],
         visibleElements: {
             labels: true,
             rangeLabels: true
