@@ -13,7 +13,6 @@ require(["esri/Map", "esri/views/MapView",
     const monthSelect = document.getElementById("month");
     const legendOptionSelect = document.getElementById("legend-option");
     const legendOptionValue = legendOptionSelect.value;
-    console.log(legendOptionValue);
 
     const yearSlider = new Slider({
         container: "year",
@@ -432,7 +431,7 @@ require(["esri/Map", "esri/views/MapView",
 
     // Directions popup window
     window.onload = function() {
-        document.getElementById('button').onclick = function() {
+        document.getElementById('closeButton').onclick = function() {
             document.getElementById('modalOverlay').style.display = 'none'
         };
     };
