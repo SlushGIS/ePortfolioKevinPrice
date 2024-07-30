@@ -111,7 +111,7 @@ require(["esri/Map", "esri/views/MapView",
 
     const almanorPointLayer = new FeatureLayer({
         portalItem: {
-            id: "efac78786486427e8816f6beb63eedb6"
+            id: "6324a649ba50439898793e92b5d0aa45"
         },
         renderer: legendOptionValue,
         outfields: ["*"],
